@@ -1,0 +1,16 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mi="using:Material.Icons.Avalonia"
+             x:Class="M2Forge.App.App"
+             RequestedThemeVariant="Dark">
+
+    <Application.Styles>
+        <FluentTheme>
+            <FluentTheme.Palettes>
+                <ColorPaletteResources x:Key="Dark" Accent="#5B8DEF" RegionColor="#0E1014" ErrorText="#F2574E"/>
+            </FluentTheme.Palettes>
+        </FluentTheme>
+        <mi:MaterialIconStyles />
+        <StyleInclude Source="/Styles/Theme.axaml"/>
+    </Application.Styles>
+</Application>

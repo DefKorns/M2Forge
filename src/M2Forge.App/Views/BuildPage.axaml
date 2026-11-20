@@ -1,0 +1,164 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:M2Forge.App.ViewModels"
+             xmlns:mi="using:Material.Icons.Avalonia"
+             xmlns:conv="using:M2Forge.App.Converters"
+             x:Class="M2Forge.App.Views.BuildPage"
+             x:DataType="vm:BuildViewModel">
+
+    <ScrollViewer>
+        <StackPanel Spacing="18" MaxWidth="1100" HorizontalAlignment="Stretch">
+
+            <Border Classes="card">
+                <StackPanel Spacing="16">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Spacing="2">
+                            <TextBlock Classes="heading" Text="Your edits"/>
+                            <TextBlock Classes="caption" Text="Replacements are applied to a copy of the firmware. The original files are never touched."/>
+                        </StackPanel>
+                        <Border Grid.Column="1" Classes="chip" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding EditCountText}" FontWeight="Medium"/>
+                        </Border>
+                    </Grid>
+
+                    <ItemsControl ItemsSource="{Binding Rows}" IsVisible="{Binding HasRows}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:EditRow">
+                                <Border Padding="0,10" BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,1,0,0">
+                                    <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="14">
+                                        <mi:MaterialIcon Kind="ImageOutline" Width="20" Height="20" Foreground="{DynamicResource EditedBrush}"/>
+                                        <StackPanel Grid.Column="1" Spacing="2">
+                                            <TextBlock Text="{Binding Target}" FontWeight="Medium"/>
+                                            <TextBlock Text="{Binding Detail}" Classes="caption"/>
+                                        </StackPanel>
+                                        <Border Grid.Column="2" Classes="chip" Classes.ok="{Binding ImageExists}" Classes.bad="{Binding !ImageExists}" VerticalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                                <mi:MaterialIcon Kind="FileImageOutline" Width="15" Height="15"/>
+                                                <TextBlock Text="{Binding ImageName}" Classes="caption" Foreground="{DynamicResource TextBrush}"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Button AutomationProperties.Name="Remove this edit" Grid.Column="3" Classes="ghost danger" Padding="8,6" ToolTip.Tip="Remove this edit"
+                                                Command="{Binding $parent[ItemsControl].((vm:BuildViewModel)DataContext).RemoveCommand}"
+                                                CommandParameter="{Binding}">
+                                            <mi:MaterialIcon Kind="TrashCanOutline" Width="17" Height="17"/>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <StackPanel Spacing="6" HorizontalAlignment="Center" Margin="0,16" IsVisible="{Binding !HasRows}">
+                        <mi:MaterialIcon Kind="ImageEditOutline" Width="36" Height="36" Foreground="{DynamicResource MutedBrush}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="No edits yet" FontWeight="Medium" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Open the Textures page, pick an image and choose Replace with PNG."
+                                   Classes="muted" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card" IsVisible="{Binding HasChangedFiles}">
+                <StackPanel Spacing="12">
+                    <StackPanel Spacing="2">
+                        <TextBlock Classes="heading" Text="Changed files"/>
+                        <TextBlock Classes="caption" Text="Files in the extracted folder that differ from the firmware. Only these are compressed and packed."/>
+                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding ChangedFiles}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ChangedFileRow">
+                                <Border Padding="0,8" BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,1,0,0">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
+                                        <mi:MaterialIcon Kind="FileEditOutline" Width="20" Height="20" Foreground="{DynamicResource EditedBrush}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Path}" FontWeight="Medium" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding Detail}" Classes="caption" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel Spacing="18">
+                    <StackPanel Spacing="2">
+                        <TextBlock Classes="heading" Text="Build"/>
+                        <TextBlock Classes="caption" Text="Creates a new alldata.bin and alldata.psb.m in the folder you choose."/>
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="140,*" RowDefinitions="Auto,Auto" RowSpacing="14">
+                        <TextBlock Text="Original firmware" Classes="label" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Workspace.FirmwareFolder, Converter={x:Static conv:Converters.Path}}" Classes="muted" TextTrimming="CharacterEllipsis"
+                                   ToolTip.Tip="{Binding Workspace.FirmwareFolder}"/>
+
+                        <TextBlock Grid.Row="1" Text="Write to" Classes="label" VerticalAlignment="Center"/>
+                        <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <TextBox AutomationProperties.Name="Folder for the new firmware files" Text="{Binding OutputFolder}" Watermark="Choose a new, empty folder..."/>
+                            <Button Grid.Column="1" Command="{Binding BrowseOutputCommand}">
+                                <StackPanel Orientation="Horizontal" Spacing="7">
+                                    <mi:MaterialIcon Kind="FolderOpenOutline" Width="17" Height="17"/>
+                                    <TextBlock Text="Browse"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Button Command="{Binding CheckCommand}" Padding="18,10">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <mi:MaterialIcon Kind="ShieldCheckOutline" Width="18" Height="18"/>
+                                <TextBlock Text="Check changes"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="primary" Command="{Binding BuildCommand}" Padding="20,10">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <mi:MaterialIcon Kind="Hammer" Width="18" Height="18"/>
+                                <TextBlock Text="Build firmware files"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding OpenOutputCommand}" IsVisible="{Binding Succeeded}" Padding="16,10">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <mi:MaterialIcon Kind="FolderOpenOutline" Width="18" Height="18"/>
+                                <TextBlock Text="Open folder"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <ProgressBar AutomationProperties.Name="Working" IsIndeterminate="True" IsVisible="{Binding IsBusy}"/>
+
+                    <Border Classes="note" Classes.error="{Binding HasIssues}" Classes.warn="{Binding HasWarnings}" IsVisible="{Binding HasStatus}">
+                        <TextBlock Text="{Binding Status}" TextWrapping="Wrap"/>
+                    </Border>
+
+                    <StackPanel Spacing="8" IsVisible="{Binding HasIssues}">
+                        <TextBlock Text="Problems" Classes="label" Foreground="{DynamicResource DangerBrush}"/>
+                        <ItemsControl ItemsSource="{Binding Issues}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Margin="0,3">
+                                        <mi:MaterialIcon Kind="AlertCircleOutline" Width="16" Height="16" Foreground="{DynamicResource DangerBrush}" VerticalAlignment="Top" Margin="0,2,0,0"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding}" TextWrapping="Wrap"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <StackPanel Spacing="8" IsVisible="{Binding HasWarnings}">
+                        <TextBlock Text="Warnings" Classes="label" Foreground="{DynamicResource WarnBrush}"/>
+                        <ItemsControl ItemsSource="{Binding Warnings}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Margin="0,3">
+                                        <mi:MaterialIcon Kind="AlertOutline" Width="16" Height="16" Foreground="{DynamicResource WarnBrush}" VerticalAlignment="Top" Margin="0,2,0,0"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding}" TextWrapping="Wrap"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

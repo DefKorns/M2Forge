@@ -1,0 +1,38 @@
+namespace M2Forge.Core.Textures;
+
+public sealed record TextureFile(string Name, IReadOnlyList<TextureSource> Sources);
+
+public sealed record TextureLibraryScan(IReadOnlyList<TextureFile> Files, IReadOnlyList<string> Failures)
+{
+    public int TextureCount => Files.Sum(f => f.Sources.Count);
+}
+
+public static class TextureLibrary
+{
+    const string Suffix = ".psb.json";
+
+    public static TextureLibraryScan Scan(string extractedRoot)
+    {
+        var files = new List<TextureFile>();
+        var failures = new List<string>();
+
+        var paths = Directory.EnumerateFiles(extractedRoot, "*" + Suffix, SearchOption.AllDirectories)
+            .OrderBy(p => p, StringComparer.OrdinalIgnoreCase);
+        foreach (var path in paths)
+        {
+            try
+            {
+                var sources = TextureCatalog.Read(path);
+                if (sources.Count == 0) continue;
+
+                var relative = Path.GetRelativePath(extractedRoot, path)[..^Suffix.Length].Replace('\\', '/');
+                files.Add(new TextureFile(relative, sources));
+            }
+            catch (Exception ex)
+            {
+                failures.Add($"{path}: {ex.Message}");
+            }
+        }
+        return new TextureLibraryScan(files, failures);
+    }
+}

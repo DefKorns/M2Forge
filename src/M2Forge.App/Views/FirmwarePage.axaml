@@ -1,0 +1,229 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:M2Forge.App.ViewModels"
+             xmlns:fw="using:M2Forge.Core.Firmware"
+             xmlns:conv="using:M2Forge.App.Converters"
+             xmlns:mi="using:Material.Icons.Avalonia"
+             x:Class="M2Forge.App.Views.FirmwarePage"
+             x:DataType="vm:FirmwareViewModel">
+
+    <ScrollViewer>
+        <StackPanel Spacing="18" MaxWidth="1100" HorizontalAlignment="Stretch">
+
+            <Border Classes="card" IsVisible="{Binding HasLibrary}">
+                <StackPanel Spacing="12">
+                    <StackPanel Spacing="2">
+                        <TextBlock Classes="heading" Text="Your firmwares"/>
+                        <TextBlock Classes="caption" TextWrapping="Wrap"
+                                   Text="Firmwares you already imported. Pick one to keep working on it. They are checked in the background to make sure they are complete."/>
+                    </StackPanel>
+
+                    <ItemsControl ItemsSource="{Binding Library}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:FirmwareEntry">
+                                <Border Padding="0,12" BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,1,0,0">
+                                    <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="14">
+                                        <mi:MaterialIcon Kind="Chip" Width="26" Height="26" Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center"
+                                                         AutomationProperties.AccessibilityView="Raw"/>
+                                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Title}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="{Binding Subtitle}" Classes="caption" TextTrimming="CharacterEllipsis" IsVisible="{Binding Subtitle.Length}"/>
+                                            <TextBlock Text="{Binding HealthDetail}" Classes="caption" TextWrapping="Wrap"
+                                                       Foreground="{DynamicResource DangerBrush}" IsVisible="{Binding IsBad}"/>
+                                        </StackPanel>
+
+                                        <Border Grid.Column="2" Classes="chip" Classes.ok="{Binding IsOk}" Classes.warn="{Binding IsWarn}" Classes.bad="{Binding IsBad}"
+                                                VerticalAlignment="Center" ToolTip.Tip="{Binding HealthDetail}">
+                                            <StackPanel Orientation="Horizontal" Spacing="7">
+                                                <mi:MaterialIcon Kind="CheckDecagram" Width="16" Height="16" Foreground="{DynamicResource OkBrush}" IsVisible="{Binding IsOk}"/>
+                                                <mi:MaterialIcon Kind="AlertOutline" Width="16" Height="16" Foreground="{DynamicResource WarnBrush}" IsVisible="{Binding IsWarn}"/>
+                                                <mi:MaterialIcon Kind="AlertCircleOutline" Width="16" Height="16" Foreground="{DynamicResource DangerBrush}" IsVisible="{Binding IsBad}"/>
+                                                <TextBlock Text="{Binding HealthLabel}" FontWeight="Medium"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Button Grid.Column="3" Content="{Binding OpenLabel}" IsEnabled="{Binding CanOpen}" MinWidth="84" HorizontalContentAlignment="Center"
+                                                Command="{Binding $parent[ItemsControl].((vm:FirmwareViewModel)DataContext).OpenEntryCommand}"
+                                                CommandParameter="{Binding}"
+                                                AutomationProperties.Name="{Binding Title, StringFormat='Open {0}'}"/>
+                                        <Button Grid.Column="4" Classes="ghost danger" Padding="8,6"
+                                                Command="{Binding $parent[ItemsControl].((vm:FirmwareViewModel)DataContext).RemoveEntryCommand}"
+                                                CommandParameter="{Binding}" ToolTip.Tip="Remove this firmware from the app"
+                                                AutomationProperties.Name="{Binding Title, StringFormat='Remove {0}'}">
+                                            <mi:MaterialIcon Kind="TrashCanOutline" Width="17" Height="17"/>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel Spacing="16">
+                    <StackPanel Spacing="2">
+                        <TextBlock Classes="heading" Text="1. Choose your firmware"/>
+                        <TextBlock Classes="caption" TextWrapping="Wrap"
+                                   Text="Pick the firmware file you downloaded (.7z), a disk image (.img), or a folder that already has the firmware files."/>
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                        <Border Classes="field" AutomationProperties.Name="{Binding SourceAccessibleName}">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                <mi:MaterialIcon Kind="PackageVariantClosed" Width="22" Height="22" Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="1" Spacing="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding SourceName}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" IsVisible="{Binding HasSource}"/>
+                                    <TextBlock Text="{Binding SourcePath}" Classes="caption" TextTrimming="CharacterEllipsis" IsVisible="{Binding HasSource}"/>
+                                    <TextBlock Text="No firmware chosen yet" Classes="muted" IsVisible="{Binding !HasSource}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <Button Grid.Column="1" Command="{Binding BrowseArchiveCommand}" AutomationProperties.Name="Choose a firmware file (.7z or .img)">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <mi:MaterialIcon Kind="FileOutline" Width="18" Height="18"/>
+                                <TextBlock Text="Choose file..."/>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="2" Command="{Binding BrowseFirmwareCommand}" AutomationProperties.Name="Choose a folder with the firmware files">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <mi:MaterialIcon Kind="FolderOpenOutline" Width="18" Height="18"/>
+                                <TextBlock Text="Choose folder..."/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <Border Classes="note" Classes.ok="{Binding SummaryOk}" Classes.warn="{Binding SummaryWarn}" Classes.error="{Binding SummaryBad}"
+                            IsVisible="{Binding ShowSummary}" AutomationProperties.LiveSetting="Polite">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                            <Panel VerticalAlignment="Top" Margin="0,1,0,0">
+                                <mi:MaterialIcon Kind="CheckDecagram" Width="22" Height="22" Foreground="{DynamicResource OkBrush}" IsVisible="{Binding SummaryOk}"/>
+                                <mi:MaterialIcon Kind="AlertOutline" Width="22" Height="22" Foreground="{DynamicResource WarnBrush}" IsVisible="{Binding SummaryWarn}"/>
+                                <mi:MaterialIcon Kind="CloseCircleOutline" Width="22" Height="22" Foreground="{DynamicResource DangerBrush}" IsVisible="{Binding SummaryBad}"/>
+                            </Panel>
+                            <StackPanel Grid.Column="1" Spacing="2">
+                                <TextBlock Text="{Binding SummaryTitle}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding SummaryText}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Grid ColumnDefinitions="140,*" IsVisible="{Binding HasSource}">
+                        <TextBlock Text="Console" Classes="label" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" IsVisible="{Binding ConsoleDetected}">
+                            <Border Classes="chip ok">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <mi:MaterialIcon Kind="CheckCircleOutline" Width="16" Height="16" Foreground="{DynamicResource OkBrush}"/>
+                                    <TextBlock Text="{Binding ConsoleText}" FontWeight="Medium"/>
+                                </StackPanel>
+                            </Border>
+                            <TextBlock Text="Detected automatically" Classes="caption" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" IsVisible="{Binding ConsolePending}">
+                            <TextBlock Text="Detecting the console..." Classes="muted" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Spacing="6" IsVisible="{Binding ConsoleUndetected}">
+                            <ComboBox ItemsSource="{Binding Profiles}" SelectedItem="{Binding Workspace.Profile}" HorizontalAlignment="Stretch"
+                                      AutomationProperties.Name="Console type">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="fw:ConsoleProfile">
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <TextBlock Text="We could not tell which console this firmware is for. Choose it from the list." Classes="caption" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel Spacing="16">
+                    <StackPanel Spacing="2">
+                        <TextBlock Classes="heading" Text="2. Extract"/>
+                        <TextBlock Classes="caption" TextWrapping="Wrap"
+                                   Text="Unpacks the menu files so you can browse the textures and the games. Your firmware is only read, never changed."/>
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                        <Button Classes="primary" Command="{Binding ExtractCommand}" Padding="20,10" AutomationProperties.Name="Extract the firmware">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <mi:MaterialIcon Kind="PackageDown" Width="18" Height="18"/>
+                                <TextBlock Text="Extract firmware"/>
+                            </StackPanel>
+                        </Button>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8">
+                            <TextBlock Text="{Binding Status}" Classes="muted" Classes.bad="{Binding Failed}" TextWrapping="Wrap"
+                                       AutomationProperties.LiveSetting="Polite"/>
+                            <TextBlock Text="{Binding ExtractionHint}" Classes="caption" TextWrapping="Wrap" IsVisible="{Binding HasSource}"/>
+                            <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}" AutomationProperties.Name="Working"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card" Padding="8,4">
+                <Expander Header="Advanced options" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" AutomationProperties.Name="Advanced options">
+                    <StackPanel Spacing="18" Margin="0,8,0,12">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Extraction folder" Classes="label"/>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <TextBox Text="{Binding Workspace.ExtractedFolder, Converter={x:Static conv:Converters.Path}, Mode=OneWay}" IsReadOnly="True"
+                                         Watermark="Where the extracted files go" AutomationProperties.Name="Extraction folder"
+                                         ToolTip.Tip="{Binding Workspace.ExtractedFolder}"/>
+                                <Button Grid.Column="1" Command="{Binding BrowseOutputCommand}" AutomationProperties.Name="Choose the extraction folder">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <mi:MaterialIcon Kind="FolderOpenOutline" Width="18" Height="18"/>
+                                        <TextBlock Text="Choose..."/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                            <TextBlock Text="By default the files are saved next to the app (the extracted folder), so your firmware folder stays untouched." Classes="caption" TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <StackPanel Spacing="6" IsVisible="{Binding SeedMissing}">
+                            <TextBlock Text="Archive key" Classes="label"/>
+                            <TextBox Text="{Binding Workspace.Seed}" Watermark="Only needed if it was not found automatically"
+                                     FontFamily="Cascadia Mono, Consolas, monospace" AutomationProperties.Name="Archive key"/>
+                            <TextBlock Text="The app normally finds this by itself. Enter it only if you know it." Classes="caption" TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="Checks" Classes="label"/>
+                            <ItemsControl ItemsSource="{Binding Checks}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:FirmwareCheck">
+                                        <Border Classes="chip" Classes.ok="{Binding Ok}" Classes.bad="{Binding !Ok}" Margin="0,0,8,8">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <mi:MaterialIcon Kind="CheckCircleOutline" Width="16" Height="16" Foreground="{DynamicResource OkBrush}" IsVisible="{Binding Ok}"/>
+                                                <mi:MaterialIcon Kind="AlertCircleOutline" Width="16" Height="16" Foreground="{DynamicResource DangerBrush}" IsVisible="{Binding !Ok}"/>
+                                                <TextBlock Text="{Binding Label}" FontWeight="Medium"/>
+                                                <TextBlock Text="{Binding Detail}" Classes="caption" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </StackPanel>
+                </Expander>
+            </Border>
+
+            <Border Classes="card" IsVisible="{Binding Log.Count}">
+                <StackPanel Spacing="10">
+                    <TextBlock Classes="heading" Text="Log"/>
+                    <ListBox Classes="plain" ItemsSource="{Binding Log}" MaxHeight="220" AutomationProperties.Name="Activity log">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <TextBlock Text="{Binding}" Classes="mono caption" TextTrimming="CharacterEllipsis"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

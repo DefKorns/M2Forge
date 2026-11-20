@@ -1,0 +1,99 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:M2Forge.App.ViewModels"
+        xmlns:views="using:M2Forge.App.Views"
+        xmlns:mi="using:Material.Icons.Avalonia"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1320" d:DesignHeight="820"
+        x:Class="M2Forge.App.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/app.ico"
+        Width="1320" Height="820" MinWidth="1060" MinHeight="660"
+        WindowStartupLocation="CenterScreen"
+        Title="M2Forge">
+
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Ctrl+N" Command="{Binding NewProjectCommand}"/>
+        <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenProjectCommand}"/>
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveProjectCommand}"/>
+        <KeyBinding Gesture="Ctrl+D1" Command="{Binding SelectPageCommand}" CommandParameter="0"/>
+        <KeyBinding Gesture="Ctrl+D2" Command="{Binding SelectPageCommand}" CommandParameter="1"/>
+        <KeyBinding Gesture="Ctrl+D3" Command="{Binding SelectPageCommand}" CommandParameter="2"/>
+        <KeyBinding Gesture="Ctrl+D4" Command="{Binding SelectPageCommand}" CommandParameter="3"/>
+    </Window.KeyBindings>
+
+    <Window.DataTemplates>
+        <DataTemplate x:DataType="vm:FirmwareViewModel"><views:FirmwarePage/></DataTemplate>
+        <DataTemplate x:DataType="vm:TexturesViewModel"><views:TexturesPage/></DataTemplate>
+        <DataTemplate x:DataType="vm:RomsViewModel"><views:RomsPage/></DataTemplate>
+        <DataTemplate x:DataType="vm:BuildViewModel"><views:BuildPage/></DataTemplate>
+    </Window.DataTemplates>
+
+    <Grid ColumnDefinitions="248,*">
+        <Border Classes="sidebar">
+            <DockPanel Margin="18,22,18,18">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="12" Margin="6,0,6,28">
+                    <Image AutomationProperties.AccessibilityView="Raw" Source="avares://M2Forge.App/Assets/logo.png" Width="40" Height="40"
+                           RenderOptions.BitmapInterpolationMode="HighQuality"/>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="M2Forge" Classes="heading"/>
+                        <TextBlock Text="Mod toolkit for M2 consoles" Classes="caption"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <Border DockPanel.Dock="Bottom" Classes="card" Padding="14" CornerRadius="10">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="PROJECT" Classes="caption" FontWeight="SemiBold"/>
+                        <TextBlock Text="{Binding ProjectTitle}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                        <TextBlock Text="{Binding Workspace.Profile.Name}" Classes="caption"/>
+                    </StackPanel>
+                </Border>
+
+                <ListBox AutomationProperties.Name="Main navigation" Classes="nav" ItemsSource="{Binding NavItems}" SelectedItem="{Binding SelectedNav}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:NavItem">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <mi:MaterialIcon Kind="{Binding Icon}" Width="20" Height="20"/>
+                                <TextBlock Text="{Binding Title}" FontWeight="Medium" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="32,26,32,10">
+                <StackPanel Spacing="2">
+                    <TextBlock Classes="title" Text="{Binding PageTitle}"/>
+                    <TextBlock Classes="muted" Text="{Binding PageSubtitle}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                    <TextBlock Classes="caption" Text="{Binding Notice}" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <Button Classes="ghost" Command="{Binding NewProjectCommand}" ToolTip.Tip="New project (Ctrl+N)" AutomationProperties.AcceleratorKey="Ctrl+N">
+                        <StackPanel Orientation="Horizontal" Spacing="7">
+                            <mi:MaterialIcon Kind="FilePlusOutline" Width="17" Height="17"/>
+                            <TextBlock Text="New"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Classes="ghost" Command="{Binding OpenProjectCommand}" ToolTip.Tip="Open a project file (Ctrl+O)" AutomationProperties.AcceleratorKey="Ctrl+O">
+                        <StackPanel Orientation="Horizontal" Spacing="7">
+                            <mi:MaterialIcon Kind="FolderOpenOutline" Width="17" Height="17"/>
+                            <TextBlock Text="Open"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding SaveProjectCommand}" ToolTip.Tip="Save the project (Ctrl+S)" AutomationProperties.AcceleratorKey="Ctrl+S">
+                        <StackPanel Orientation="Horizontal" Spacing="7">
+                            <mi:MaterialIcon Kind="ContentSaveOutline" Width="17" Height="17"/>
+                            <TextBlock Text="Save"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <ContentControl Grid.Row="1" Content="{Binding CurrentPage}" Margin="32,10,32,28"/>
+        </Grid>
+    </Grid>
+</Window>

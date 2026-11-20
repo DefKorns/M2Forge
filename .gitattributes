@@ -1,0 +1,8 @@
+* text=auto eol=lf
+*.sln text eol=crlf
+*.png binary
+*.ico binary
+*.7z binary
+*.zip binary
+*.chd binary
+*.mcd binary
