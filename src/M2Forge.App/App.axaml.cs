@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace M2Forge.App;
 
-public partial class App : Application
+public sealed partial class App : Application
 {
     public override void Initialize()
     {

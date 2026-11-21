@@ -9,25 +9,6 @@ using M2Forge.Core.Firmware;
 
 namespace M2Forge.App.Services;
 
-public sealed record CachedHealth(long BinSize, long BinTicks, FirmwareHealth Health, string Detail, string? Name);
-
-public sealed record FirmwareMeta(string Source, ConsoleKind? Console, CachedHealth? Health);
-
-public sealed record FirmwareFolderInfo(
-    string Name,
-    string Folder,
-    string ExtractedFolder,
-    bool IsExtracted,
-    long BinSize,
-    long BinTicks,
-    FirmwareMeta? Meta,
-    KnownFirmware? Known)
-{
-    public string Title => Known?.Name ?? Name;
-
-    public ConsoleKind? Console => Meta?.Console ?? Known?.Console;
-}
-
 public static class FirmwareLibrary
 {
     const string MetaFile = "firmware.json";

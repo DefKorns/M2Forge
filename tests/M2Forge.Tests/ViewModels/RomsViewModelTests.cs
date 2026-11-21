@@ -3,7 +3,7 @@ using M2Forge.App.ViewModels;
 
 namespace M2Forge.Tests.ViewModels;
 
-public class RomsViewModelTests : IDisposable
+public sealed class RomsViewModelTests : IDisposable
 {
     readonly string root = Path.Combine(Path.GetTempPath(), "m2forge-rvm-" + Guid.NewGuid().ToString("N"));
     readonly FakeDialogs dialogs = new();

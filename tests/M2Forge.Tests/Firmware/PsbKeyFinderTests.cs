@@ -3,7 +3,7 @@ using M2Forge.Core.Firmware;
 
 namespace M2Forge.Tests.Firmware;
 
-public class PsbKeyFinderTests
+public sealed class PsbKeyFinderTests
 {
     static byte[] Build(string key) =>
         [.. "junk"u8.ToArray(), 0, .. "getExistFileDirInMountArchive"u8.ToArray(), 0, 0, 0, .. Encoding.ASCII.GetBytes(key), 0, 0, 0, 77];

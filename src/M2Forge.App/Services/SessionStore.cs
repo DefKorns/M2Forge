@@ -6,8 +6,6 @@ using M2Forge.App.ViewModels;
 
 namespace M2Forge.App.Services;
 
-public sealed record SessionInfo(string Source, bool ConsoleDetected, int Page);
-
 public sealed class SessionStore(string folder)
 {
     static readonly JsonSerializerOptions Options = new() { WriteIndented = true };

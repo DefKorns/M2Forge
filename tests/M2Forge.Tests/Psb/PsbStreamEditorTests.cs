@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace M2Forge.Tests.Psb;
 
-public class PsbStreamEditorTests
+public sealed class PsbStreamEditorTests
 {
     static byte[] BuildPsb(ushort version, params byte[][] streams)
     {

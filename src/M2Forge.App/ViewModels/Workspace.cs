@@ -8,7 +8,7 @@ using M2Forge.Core.Projects;
 
 namespace M2Forge.App.ViewModels;
 
-public partial class Workspace : ObservableObject
+public sealed partial class Workspace : ObservableObject
 {
     const string ProjectSuffix = ".m2forge.json";
 

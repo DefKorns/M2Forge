@@ -2,7 +2,7 @@ using M2Forge.Core.Roms;
 
 namespace M2Forge.Tests.Roms;
 
-public class RomExporterTests : IDisposable
+public sealed class RomExporterTests : IDisposable
 {
     readonly string work = Path.Combine(Path.GetTempPath(), "m2forge-rex-" + Guid.NewGuid().ToString("N"));
 

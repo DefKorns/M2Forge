@@ -2,7 +2,7 @@ using M2Forge.Core.Textures;
 
 namespace M2Forge.Tests.Textures;
 
-public class TextureLibraryTests : IDisposable
+public sealed class TextureLibraryTests : IDisposable
 {
     readonly string root = Path.Combine(Path.GetTempPath(), "m2forge-lib-" + Guid.NewGuid().ToString("N"));
 

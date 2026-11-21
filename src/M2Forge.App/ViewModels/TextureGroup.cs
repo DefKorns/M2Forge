@@ -1,27 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommunityToolkit.Mvvm.ComponentModel;
 using M2Forge.Core.Textures;
 
 namespace M2Forge.App.ViewModels;
-
-public sealed partial class TextureTile : ObservableObject
-{
-    public TextureTile(TextureNode node)
-    {
-        Node = node;
-    }
-
-    public TextureNode Node { get; }
-
-    [ObservableProperty] RgbaImage? thumbnail;
-
-    public bool IsWhole => Node.Kind == TextureNodeKind.Texture;
-    public string Label => IsWhole ? "Image " + Node.Name : Node.Name;
-    public string Detail => Node.Detail;
-    public string AccessibleName => IsWhole ? $"Whole image {Node.Name}, {Node.Detail}" : $"Image {Node.Name}, {Node.Detail}";
-}
 
 public sealed class TextureGroup
 {
@@ -63,12 +45,4 @@ public sealed class TextureGroup
         }
         return tiles;
     }
-}
-
-public sealed partial class CategoryChip(TextureCategory category, string label) : ObservableObject
-{
-    public TextureCategory Category { get; } = category;
-    public string Label { get; } = label;
-
-    [ObservableProperty] bool isActive;
 }

@@ -7,7 +7,7 @@ using M2Forge.Core.Firmware;
 namespace M2Forge.Tests.ViewModels;
 
 [Collection("AppFolders")]
-public class FirmwareLibraryTests : IDisposable
+public sealed class FirmwareLibraryTests : IDisposable
 {
     const string Seed = "seed-for-tests";
 

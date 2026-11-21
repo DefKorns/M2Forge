@@ -1,12 +1,5 @@
 namespace M2Forge.Core.Firmware;
 
-public enum ConsoleKind
-{
-    MegaDriveMini,
-    MegaDriveMini2,
-    PcEngineMini,
-}
-
 public sealed record ConsoleProfile(ConsoleKind Kind, string Name, string Codename, string Codec, int KeyLength)
 {
     public static ConsoleProfile MegaDriveMini { get; } =

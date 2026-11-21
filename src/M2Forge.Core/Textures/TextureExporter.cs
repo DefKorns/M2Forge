@@ -1,7 +1,5 @@
 namespace M2Forge.Core.Textures;
 
-public sealed record TextureExportResult(int Textures, int Icons, IReadOnlyList<string> Failures);
-
 public static class TextureExporter
 {
     public static TextureExportResult ExportFile(string psbJsonPath, string outputDir)

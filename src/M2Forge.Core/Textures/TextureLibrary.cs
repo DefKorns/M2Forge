@@ -1,12 +1,5 @@
 namespace M2Forge.Core.Textures;
 
-public sealed record TextureFile(string Name, IReadOnlyList<TextureSource> Sources);
-
-public sealed record TextureLibraryScan(IReadOnlyList<TextureFile> Files, IReadOnlyList<string> Failures)
-{
-    public int TextureCount => Files.Sum(f => f.Sources.Count);
-}
-
 public static class TextureLibrary
 {
     const string Suffix = ".psb.json";

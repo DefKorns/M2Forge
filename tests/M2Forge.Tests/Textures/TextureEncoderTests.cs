@@ -2,7 +2,7 @@ using M2Forge.Core.Textures;
 
 namespace M2Forge.Tests.Textures;
 
-public class TextureEncoderTests
+public sealed class TextureEncoderTests
 {
     [Fact]
     public void Encode_Rgba8_CopiesPixels()

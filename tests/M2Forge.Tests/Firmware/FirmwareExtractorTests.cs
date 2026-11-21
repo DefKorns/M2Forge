@@ -2,7 +2,7 @@ using M2Forge.Core.Firmware;
 
 namespace M2Forge.Tests.Firmware;
 
-public class FirmwareExtractorTests : IDisposable
+public sealed class FirmwareExtractorTests : IDisposable
 {
     readonly string output = Path.Combine(Path.GetTempPath(), "m2forge-test-" + Guid.NewGuid().ToString("N"));
 

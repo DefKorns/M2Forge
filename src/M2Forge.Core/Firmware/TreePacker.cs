@@ -2,16 +2,6 @@ using M2Forge.Core.Psb;
 
 namespace M2Forge.Core.Firmware;
 
-public sealed record TreeChange(string Entry, string RelativePath, long OldSize, long NewSize);
-
-public sealed record TreeScan(
-    IReadOnlyList<TreeChange> Changes,
-    IReadOnlyDictionary<string, byte[]> Replacements,
-    IReadOnlyList<string> Warnings,
-    IReadOnlyList<string> Issues,
-    int Missing,
-    int Compared);
-
 public static class TreePacker
 {
     public static string RelativePath(string entry) =>

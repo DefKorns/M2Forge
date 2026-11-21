@@ -3,8 +3,6 @@ using System.Text;
 
 namespace M2Forge.Core.Discs;
 
-public sealed record WavPcm(long DataOffset, long DataLength);
-
 public static class WavFile
 {
     public static WavPcm ReadHeader(Stream stream)

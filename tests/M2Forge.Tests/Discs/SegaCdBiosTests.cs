@@ -4,7 +4,7 @@ using M2Forge.Core.Roms;
 
 namespace M2Forge.Tests.Discs;
 
-public class SegaCdBiosTests : IDisposable
+public sealed class SegaCdBiosTests : IDisposable
 {
     readonly string work = Path.Combine(Path.GetTempPath(), "m2forge-bios-" + Guid.NewGuid().ToString("N"));
 

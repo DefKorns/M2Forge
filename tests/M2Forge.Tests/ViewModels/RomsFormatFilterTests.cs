@@ -2,7 +2,7 @@ using M2Forge.App.ViewModels;
 
 namespace M2Forge.Tests.ViewModels;
 
-public class RomsFormatFilterTests : IDisposable
+public sealed class RomsFormatFilterTests : IDisposable
 {
     readonly string root = Path.Combine(Path.GetTempPath(), "m2forge-rff-" + Guid.NewGuid().ToString("N"));
     readonly FakeDialogs dialogs = new();

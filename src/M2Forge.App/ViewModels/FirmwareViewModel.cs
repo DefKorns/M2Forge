@@ -11,9 +11,7 @@ using M2Forge.Core.Firmware;
 
 namespace M2Forge.App.ViewModels;
 
-public sealed record FirmwareCheck(string Label, bool Ok, string Detail);
-
-public partial class FirmwareViewModel : ViewModelBase
+public sealed partial class FirmwareViewModel : ViewModelBase
 {
     readonly IDialogService dialogs;
 

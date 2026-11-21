@@ -4,20 +4,6 @@ using M2Forge.Core.Textures;
 
 namespace M2Forge.Core.Projects;
 
-public sealed record ProjectPlan(
-    IReadOnlyDictionary<string, byte[]> Replacements,
-    IReadOnlyList<string> Issues,
-    IReadOnlyList<string> Warnings,
-    int EditsApplied,
-    IReadOnlyList<TreeChange>? TreeChanges = null)
-{
-    public IReadOnlyList<TreeChange> Tree { get; } = TreeChanges ?? [];
-
-    public bool CanBuild => Issues.Count == 0;
-}
-
-public sealed record ProjectBuildResult(ProjectPlan Plan, AllDataBuildResult? Archive);
-
 public static class ProjectBuilder
 {
     public static ProjectBuildResult Build(EditProject project, string outputDirectory, IProgress<string>? progress = null)

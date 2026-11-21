@@ -16,7 +16,7 @@ using M2Forge.Core.Textures;
 
 namespace M2Forge.App.ViewModels;
 
-public partial class TexturesViewModel : ViewModelBase
+public sealed partial class TexturesViewModel : ViewModelBase
 {
     readonly Workspace workspace;
     readonly IDialogService dialogs;

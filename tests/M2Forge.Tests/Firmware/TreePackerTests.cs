@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace M2Forge.Tests.Firmware;
 
-public class TreePackerTests : IDisposable
+public sealed class TreePackerTests : IDisposable
 {
     const string Seed = "seed-for-tests";
 

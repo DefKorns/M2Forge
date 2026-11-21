@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace M2Forge.Tests.Projects;
 
-public class ProjectBuilderTests : IDisposable
+public sealed class ProjectBuilderTests : IDisposable
 {
     const string Seed = "seed-for-tests";
     const string Psb = "sys/motion/m.psb";

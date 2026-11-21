@@ -3,7 +3,7 @@ using M2Forge.Core.Roms;
 
 namespace M2Forge.Tests.Roms;
 
-public class RomLibraryTests : IDisposable
+public sealed class RomLibraryTests : IDisposable
 {
     readonly string root = Path.Combine(Path.GetTempPath(), "m2forge-rom-" + Guid.NewGuid().ToString("N"));
 

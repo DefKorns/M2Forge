@@ -4,14 +4,6 @@ using System.Linq;
 
 namespace M2Forge.App.ViewModels;
 
-public enum TextureCategory
-{
-    All,
-    Covers,
-    Interface,
-    Fonts,
-}
-
 public static class TextureGrouping
 {
     static readonly Dictionary<string, string> KnownNames = new(StringComparer.OrdinalIgnoreCase)

@@ -2,14 +2,6 @@ using System.Buffers.Binary;
 
 namespace M2Forge.Core.Psb;
 
-public enum PsbStreamKind
-{
-    Stream,
-    BStream,
-}
-
-public sealed record PsbStreamLocation(PsbStreamKind Kind, uint Index, int Offset, int Length);
-
 public sealed class PsbStreamEditor
 {
     const int HeaderSize = 56;

@@ -2,7 +2,7 @@ using M2Forge.Core.Textures;
 
 namespace M2Forge.Tests.Textures;
 
-public class TextureReplacerTests
+public sealed class TextureReplacerTests
 {
     static TextureSource Source(TextureFormat format, int width, int height, params IconInfo[] icons) =>
         new("tex", format, width, height, "unused", icons);

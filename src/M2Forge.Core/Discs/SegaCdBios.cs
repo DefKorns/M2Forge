@@ -3,8 +3,6 @@ using M2Forge.Core.Roms;
 
 namespace M2Forge.Core.Discs;
 
-public sealed record SegaCdBiosFile(RomInfo Rom, string RetroArchName);
-
 public static class SegaCdBios
 {
     const int HeaderSize = 0x200;

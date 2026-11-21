@@ -3,10 +3,6 @@ using System.IO.Hashing;
 
 namespace M2Forge.Core.Roms;
 
-public sealed record RomExportResult(int Exported, int Skipped, long Bytes, IReadOnlyList<string> Failures);
-
-public sealed record RomHashes(string Crc32, string Sha1);
-
 public static class RomExporter
 {
     public static string ExportName(RomInfo rom, string extension = ".bin")

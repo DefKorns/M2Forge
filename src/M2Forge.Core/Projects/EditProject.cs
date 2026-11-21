@@ -4,8 +4,6 @@ using M2Forge.Core.Firmware;
 
 namespace M2Forge.Core.Projects;
 
-public sealed record TextureEdit(string Psb, string Texture, string? Icon, string Image);
-
 public sealed class EditProject
 {
     public const int CurrentVersion = 1;

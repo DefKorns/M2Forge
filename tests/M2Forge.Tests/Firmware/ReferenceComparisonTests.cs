@@ -4,7 +4,7 @@ using M2Forge.Core.Firmware;
 
 namespace M2Forge.Tests.Firmware;
 
-public class ReferenceComparisonTests : IDisposable
+public sealed class ReferenceComparisonTests : IDisposable
 {
     public const string ReferenceVariable = "M2FORGE_TEST_REFERENCE";
 

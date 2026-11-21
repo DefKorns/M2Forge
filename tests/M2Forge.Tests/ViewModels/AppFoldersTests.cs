@@ -3,7 +3,7 @@ using M2Forge.App.Services;
 namespace M2Forge.Tests.ViewModels;
 
 [Collection("AppFolders")]
-public class AppFoldersTests : IDisposable
+public sealed class AppFoldersTests : IDisposable
 {
     readonly string originalRoot = AppFolders.Root;
 

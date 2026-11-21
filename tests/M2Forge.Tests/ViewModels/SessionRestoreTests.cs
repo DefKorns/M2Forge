@@ -4,7 +4,7 @@ using M2Forge.App.ViewModels;
 namespace M2Forge.Tests.ViewModels;
 
 [Collection("AppFolders")]
-public class SessionRestoreTests : IDisposable
+public sealed class SessionRestoreTests : IDisposable
 {
     readonly string work = Path.Combine(Path.GetTempPath(), "m2forge-session-" + Guid.NewGuid().ToString("N"));
     readonly string originalRoot = AppFolders.Root;

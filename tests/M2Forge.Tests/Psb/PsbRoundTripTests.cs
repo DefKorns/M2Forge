@@ -2,7 +2,7 @@ using M2Forge.Core.Psb;
 
 namespace M2Forge.Tests.Psb;
 
-public class PsbRoundTripTests
+public sealed class PsbRoundTripTests
 {
     static List<string> FirmwarePsbFiles()
     {

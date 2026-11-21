@@ -4,8 +4,6 @@ using M2Forge.Core.Psb;
 
 namespace M2Forge.Core.Firmware;
 
-public sealed record ExtractionResult(int FilesExtracted, int ArchivesDecompressed, int PsbsDeserialized, IReadOnlyList<string> Failures);
-
 public sealed class FirmwareExtractor(ConsoleProfile profile, string seed)
 {
     readonly MArchivePacker packer = new(CodecFactory.Create(profile.Codec), seed, profile.KeyLength);

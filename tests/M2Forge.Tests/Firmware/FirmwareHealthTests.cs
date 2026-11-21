@@ -4,7 +4,7 @@ using M2Forge.Core.Firmware;
 
 namespace M2Forge.Tests.Firmware;
 
-public class FirmwareHealthTests : IDisposable
+public sealed class FirmwareHealthTests : IDisposable
 {
     const string Seed = "seed-for-tests";
 

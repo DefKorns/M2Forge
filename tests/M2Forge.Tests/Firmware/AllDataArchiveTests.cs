@@ -3,7 +3,7 @@ using M2Forge.Core.Firmware;
 
 namespace M2Forge.Tests.Firmware;
 
-public class AllDataArchiveTests : IDisposable
+public sealed class AllDataArchiveTests : IDisposable
 {
     const string Seed = "seed-for-tests";
 

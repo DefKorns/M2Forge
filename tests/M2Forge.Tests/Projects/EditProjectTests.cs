@@ -3,7 +3,7 @@ using M2Forge.Core.Projects;
 
 namespace M2Forge.Tests.Projects;
 
-public class EditProjectTests : IDisposable
+public sealed class EditProjectTests : IDisposable
 {
     readonly string work = Path.Combine(Path.GetTempPath(), "m2forge-prj-" + Guid.NewGuid().ToString("N"));
 

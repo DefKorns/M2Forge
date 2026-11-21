@@ -3,7 +3,7 @@ using M2Forge.Core.Firmware;
 
 namespace M2Forge.Tests.Firmware;
 
-public class MArchiveBytesTests : IDisposable
+public sealed class MArchiveBytesTests : IDisposable
 {
     readonly string work = Path.Combine(Path.GetTempPath(), "m2forge-mab-" + Guid.NewGuid().ToString("N"));
     readonly MArchiveBytes bytes = new(ConsoleProfile.MegaDriveMini, "seed-for-tests");

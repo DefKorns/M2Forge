@@ -10,9 +10,7 @@ using M2Forge.App.Services;
 
 namespace M2Forge.App.ViewModels;
 
-public sealed record NavItem(string Title, string Subtitle, MaterialIconKind Icon, ViewModelBase Page);
-
-public partial class MainWindowViewModel : ViewModelBase
+public sealed partial class MainWindowViewModel : ViewModelBase
 {
     readonly IDialogService dialogs;
     readonly SessionStore? sessions;

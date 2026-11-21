@@ -2,8 +2,6 @@ using System.Buffers.Binary;
 
 namespace M2Forge.Core.Firmware;
 
-public sealed record DiskPartition(int Number, long Offset, long Length, byte Type);
-
 public static class DiskPartitions
 {
     const int SectorSize = 512;

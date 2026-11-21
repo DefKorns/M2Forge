@@ -5,21 +5,6 @@ using Newtonsoft.Json;
 
 namespace M2Forge.Core.Textures;
 
-public sealed record IconInfo(string Name, int Left, int Top, int Width, int Height);
-
-public sealed record TextureSource(
-    string Name,
-    TextureFormat Format,
-    int Width,
-    int Height,
-    string StreamPath,
-    IReadOnlyList<IconInfo> Icons,
-    PsbStreamKind StreamKind = PsbStreamKind.Stream,
-    uint StreamIndex = 0)
-{
-    public RgbaImage Load() => RgbaImage.Decode(Format, File.ReadAllBytes(StreamPath), Width, Height);
-}
-
 public static class TextureCatalog
 {
     public static IReadOnlyList<TextureSource> Read(string psbJsonPath)

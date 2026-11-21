@@ -2,7 +2,7 @@ using M2Forge.Core.Textures;
 
 namespace M2Forge.Tests.Textures;
 
-public class PngDecoderTests
+public sealed class PngDecoderTests
 {
     static byte[][] Rows(byte[] flat, int rowLength) =>
         Enumerable.Range(0, flat.Length / rowLength).Select(i => flat[(i * rowLength)..((i + 1) * rowLength)]).ToArray();

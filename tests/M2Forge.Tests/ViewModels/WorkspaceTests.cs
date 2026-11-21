@@ -4,7 +4,7 @@ using M2Forge.Core.Projects;
 
 namespace M2Forge.Tests.ViewModels;
 
-public class WorkspaceTests : IDisposable
+public sealed class WorkspaceTests : IDisposable
 {
     readonly string work = Path.Combine(Path.GetTempPath(), "m2forge-ws-" + Guid.NewGuid().ToString("N"));
 
